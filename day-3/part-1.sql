@@ -1,12 +1,14 @@
 /*
 -- Set up input (engine schematic)
-drop foreign table if exists aoc2023_q1_input;
+drop foreign table if exists aoc2023_d3_input;
 create
-	foreign table aoc2023_q3_input (entry varchar)
+	foreign table aoc2023_d3_input (entry varchar)
 	server aoc2023
 	option (filename 'aoc-2023-day-3-input.txt')
 ;
 */
+
+-- Day 3 Part 1
 
 with recursive
 searchable_entry as
@@ -16,7 +18,7 @@ searchable_entry as
 		entry,
 		'[^.]|\d+' search_expression
 	from
-		aoc2023_q3_input
+		aoc2023_d3_input
 ),
 search_entry_result AS 
 (
@@ -41,8 +43,10 @@ search_entry_result AS
 		end match_result
 	from
 		(
-			select coalesce(array_length(regexp_match(substring(entry, end_match_string_index + coalesce(length("match"), 1), 1), search_expression), 1), 0) is_match,
-					(regexp_match(substring(entry, end_match_string_index + coalesce(length("match"), 1), length(entry)), search_expression))[1] "match",
+			select coalesce(array_length(regexp_match(substring(entry, end_match_string_index
+					+ coalesce(length("match"), 1), 1), search_expression), 1), 0) is_match,
+					(regexp_match(substring(entry, end_match_string_index
+					+ coalesce(length("match"), 1), length(entry)), search_expression))[1] "match",
 					end_match_string_index + coalesce(length("match"), 1) end_match_string_index,
 					se.*
 			from search_entry_result ser
@@ -116,5 +120,3 @@ select
 from
 	part 
 ;
-
-
